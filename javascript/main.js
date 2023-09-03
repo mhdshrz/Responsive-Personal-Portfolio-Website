@@ -1,4 +1,4 @@
-// ------------ show menu ------------ //
+// -------------------- show menu -------------------- //
 const navMenu = document.getElementById("nav-menu");
 const navToggle = document.getElementById("nav-toggle");
 const navClose = document.getElementById("nav-close");
@@ -17,7 +17,7 @@ if (navClose) {
   });
 }
 
-// ------------ remove menu mobile ------------ //
+// -------------------- remove menu mobile -------------------- //
 const navLink = document.querySelectorAll(".nav__link");
 
 const linkAction = () => {
@@ -27,7 +27,7 @@ const linkAction = () => {
 
 navLink.forEach((item) => item.addEventListener("click", linkAction));
 
-// ------------ shadow header ------------ //
+// -------------------- shadow header -------------------- //
 const shadowHeader = () => {
   const header = document.getElementById("header");
   this.scrollY >= 50
@@ -37,12 +37,109 @@ const shadowHeader = () => {
 
 window.addEventListener("scroll", shadowHeader);
 
-/*=============== EMAIL JS ===============*/
+// -------------------- email -------------------- //
+const contactForm = document.getElementById("contact-form");
+const contactMessage = document.getElementById("contact-message");
 
-/*=============== SHOW SCROLL UP ===============*/
+const sendEmail = (e) => {
+  e.preventDefault();
+  // serviceID - templateID - #form - publicKey
+  emailjs
+    .sendForm(
+      "service_8k01m8h",
+      "template_4hqcg1q",
+      "#contact-form",
+      "ViyE9Dy-3WzfZqPF5"
+    )
+    .then(
+      () => {
+        // show sent message success
+        contactMessage.textContent = "Message sent successfully ✅";
+        // remove sent message success after five seconds
+        setTimeout(() => {
+          contactMessage.textContent = "";
+        }, 5000);
+        // clear input fields
+        contactForm.reset();
+      },
+      () => {
+        //show error message
+        contactMessage.textContent = "Message not sent (service error) ❌";
+      }
+    );
+};
 
-/*=============== SCROLL SECTIONS ACTIVE LINK ===============*/
+contactForm.addEventListener("submit", sendEmail);
 
-/*=============== DARK LIGHT THEME ===============*/
+// -------------------- show scroll up -------------------- //
+const scrollUp = () => {
+  const scrollUpElement = document.getElementById("scroll-up");
+  // when the scroll is higher than 350 vh, show the button
+  this.scrollY >= 350
+    ? scrollUpElement.classList.add("show__scroll")
+    : scrollUpElement.classList.remove("show__scroll");
+};
 
-/*=============== SCROLL REVEAL ANIMATION ===============*/
+window.addEventListener("scroll", scrollUp);
+
+// -------------------- scroll section active link -------------------- //
+// all section elements that has an id attribute
+const sections = document.querySelectorAll("section[id]");
+
+const scrollActive = () => {
+  const scrollDown = window.scrollY;
+  sections.forEach((item) => {
+    const sectionHeight = item.offsetHeight;
+    const sectionTop = item.offsetTop - 56; // this the header height
+    const sectionId = item.getAttribute("id");
+    const sectionClass = document.querySelector(
+      ".nav__menu a[href*=" + sectionId + "]"
+    );
+
+    if (scrollDown > sectionTop && scrollDown <= sectionTop + sectionHeight)
+      sectionClass.classList.add("active__link");
+    else sectionClass.classList.remove("active__link");
+  });
+};
+
+window.addEventListener("scroll", scrollActive);
+
+// -------------------- light/dark theme -------------------- //
+const themeButton = document.getElementById("theme-button");
+
+// previously selected theme (if any)
+const selectedTheme = localStorage.getItem("selected-theme");
+
+// applying user's chosen them (if any)
+if (selectedTheme) {
+  document.body.classList[selectedTheme === "dark" ? "add" : "remove"](
+    "dark__theme"
+  );
+  themeButton
+    .querySelector("i")
+    .classList.add(selectedTheme === "dark" ? "ri-sun-line" : "ri-moon-line");
+}
+
+// getting the current theme
+const getCurrentTheme = () =>
+  document.body.classList.contains("dark__theme") ? "dark" : "light";
+const getCurrentIcon = () =>
+  themeButton.querySelector("i").classList.contains("ri-sun-line")
+    ? "ri-sun-line"
+    : "ri-moon-line";
+
+// toggling the theme
+themeButton.addEventListener("click", () => {
+  document.body.classList.toggle("dark__theme");
+  localStorage.setItem("selected-theme", getCurrentTheme());
+
+  if (getCurrentIcon() === "ri-moon-line") {
+    themeButton.querySelector("i").classList.remove("ri-moon-line");
+    themeButton.querySelector("i").classList.add("ri-sun-line");
+  } else {
+    themeButton.querySelector("i").classList.remove("ri-sun-line");
+    themeButton.querySelector("i").classList.add("ri-moon-line");
+  }
+});
+
+// -------------------- scroll reveal animation -------------------- //
