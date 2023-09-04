@@ -30,7 +30,7 @@ navLink.forEach((item) => item.addEventListener("click", linkAction));
 // -------------------- shadow header -------------------- //
 const shadowHeader = () => {
   const header = document.getElementById("header");
-  this.scrollY >= 50
+  this.scrollY >= 5
     ? header.classList.add("shadow__header")
     : header.classList.remove("shadow__header");
 };
@@ -90,7 +90,8 @@ const scrollActive = () => {
   const scrollDown = window.scrollY;
   sections.forEach((item) => {
     const sectionHeight = item.offsetHeight;
-    const sectionTop = item.offsetTop - 56; // this the header height
+    const headerHeight = document.getElementById("header").offsetHeight;
+    const sectionTop = item.offsetTop - headerHeight;
     const sectionId = item.getAttribute("id");
     const sectionClass = document.querySelector(
       ".nav__menu a[href*=" + sectionId + "]"
